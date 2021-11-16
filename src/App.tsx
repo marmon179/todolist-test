@@ -90,18 +90,9 @@ const App = () => {
                 <Grid container spacing={3}>
                     {
                         todoLists.map(tl => {
-                            const allTodoListTasks = tasks[tl.id];
-                            let tasksForTodolist = allTodoListTasks;
-
-                            if (tl.filter === 'active') {
-                                tasksForTodolist = allTodoListTasks.filter(t => !t.isDone);
-                            }
-                            if (tl.filter === 'completed') {
-                                tasksForTodolist = allTodoListTasks.filter(t => t.isDone);
-                            }
-
+                            let tasksForTodolist = tasks[tl.id];
                             return <Grid item>
-                                <Paper style={{padding: '10px'}}>
+                                <Paper elevation={3} style={{padding: '10px'}}>
                                     <Todolist
                                         key={tl.id}
                                         id={tl.id}
