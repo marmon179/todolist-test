@@ -5,8 +5,8 @@ import {AddItemForm} from './AddItemForm';
 import {Container, Grid, Paper} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './store/store';
-import {changeTaskStatus, changeTaskTitle} from './store/tasksReducer';
-import {addTodolist, changeTodolistFilter, changeTodolistTitle} from './store/todoListsReducer';
+import {addTask, changeTaskStatus, changeTaskTitle, deleteTask} from './store/tasksReducer';
+import {addTodolist, changeTodolistFilter, changeTodolistTitle, deleteTodoList} from './store/todoListsReducer';
 
 const App = () => {
 
@@ -14,11 +14,11 @@ const App = () => {
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
     const dispatch = useDispatch();
 
-    const deleteTask = useCallback((id: string, todoListId: string) => {
+    const delete_Task = useCallback((id: string, todoListId: string) => {
         dispatch(deleteTask(id, todoListId));
     }, [dispatch]);
 
-    const addTask = useCallback((title: string, todoListId: string) => {
+    const add_Task = useCallback((title: string, todoListId: string) => {
         dispatch(addTask(title, todoListId));
     }, [dispatch]);
 
@@ -34,8 +34,8 @@ const App = () => {
         dispatch(changeTodolistFilter(todolistId, value));
     }, [dispatch]);
 
-    const deleteTodolist = useCallback((id: string) => {
-        dispatch(deleteTodolist(id));
+    const delete_Todolist = useCallback((id: string) => {
+        dispatch(deleteTodoList(id));
     }, [dispatch]);
 
     const change_TodoListTitle = useCallback((id: string, title: string) => {
@@ -63,12 +63,12 @@ const App = () => {
                                         id={tl.id}
                                         title={tl.title}
                                         tasks={tasksForTodolist}
-                                        deleteTask={deleteTask}
+                                        deleteTask={delete_Task}
                                         changeFilter={changeFilter}
-                                        addTask={addTask}
+                                        addTask={add_Task}
                                         changeTaskStatus={changeStatus}
                                         filter={tl.filter}
-                                        deleteTodolist={deleteTodolist}
+                                        deleteTodolist={delete_Todolist}
                                         changeTaskTitle={change_TaskTitle}
                                         changeTodoListTitle={change_TodoListTitle}
                                     />
