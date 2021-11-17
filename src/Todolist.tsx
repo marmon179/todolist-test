@@ -1,10 +1,11 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {FilterType} from './App';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import {Button, IconButton} from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import {Task} from './Task';
+import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful-dnd';
 
 export const Todolist: React.FC<PropsType> = React.memo((
     {
@@ -36,6 +37,19 @@ export const Todolist: React.FC<PropsType> = React.memo((
         tasksForTodolist = tasks.filter(t => t.isDone);
     }
 
+    const [task, setTask] = useState(tasksForTodolist);
+
+    const onDragEnd = (result: DropResult) => {
+        const {source, destination} = result;
+        if (!destination) return;
+
+        const items = Array.from(task);
+        const [newOrder] = items.splice(source.index, 1);
+        items.splice(destination.index, 0, newOrder);
+
+        setTask(items);
+    };
+
     return <div>
         <h3><EditableSpan value={title} onChange={changeTodolistTitle}/>
             <IconButton onClick={removeTodolist}>
@@ -43,18 +57,43 @@ export const Todolist: React.FC<PropsType> = React.memo((
             </IconButton>
         </h3>
         <AddItemForm addItem={addTaskNew}/>
-        <div>
-            {
-                tasksForTodolist.map(t => <Task
-                    task={t}
-                    changeTaskStatus={changeTaskStatus}
-                    changeTaskTitle={changeTaskTitle}
-                    removeTask={deleteTask}
-                    todolistId={id}
-                    key={t.id}
-                />)
-            }
-        </div>
+        <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="task">
+                {(provided => (
+                    <div className="task" {...provided.droppableProps} ref={provided.innerRef}>
+                        {
+                            task.map((t, index) => {
+                                    return (
+                                        <Draggable draggableId={t.id} index={index}>
+                                            {(provided) => (
+                                                <div
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    // style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                                                >
+                                                    <Task
+                                                        task={t}
+                                                        changeTaskStatus={changeTaskStatus}
+                                                        changeTaskTitle={changeTaskTitle}
+                                                        removeTask={deleteTask}
+                                                        todolistId={id}
+                                                        key={t.id}
+                                                    />
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                    );
+                                }
+                            )
+                        }
+                        {provided.placeholder}
+                    </div>
+                ))
+
+                }
+            </Droppable>
+        </DragDropContext>
         <div style={{paddingTop: '10px'}}>
             <Button variant={filter === 'all' ? 'contained' : 'text'}
                     onClick={onAllClickHandler}
