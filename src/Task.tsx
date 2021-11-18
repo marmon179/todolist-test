@@ -3,6 +3,8 @@ import {Checkbox, IconButton} from '@material-ui/core';
 import {EditableSpan} from './EditableSpan';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import {TaskType} from './Todolist';
+import DehazeIcon from '@material-ui/icons/Dehaze';
+import {Draggable} from 'react-beautiful-dnd';
 
 type TaskPropsType = {
     changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
@@ -10,10 +12,11 @@ type TaskPropsType = {
     removeTask: (taskId: string, todolistId: string) => void
     task: TaskType
     todolistId: string
+    index: number
 }
 export const Task: React.FC<TaskPropsType> = React.memo((
     {
-        changeTaskStatus, changeTaskTitle, removeTask, task, todolistId
+        changeTaskStatus, changeTaskTitle, removeTask, task, todolistId, index
     }
 ) => {
     const onClickHandler = () => removeTask(task.id, todolistId);
@@ -25,17 +28,38 @@ export const Task: React.FC<TaskPropsType> = React.memo((
         changeTaskTitle(task.id, value, todolistId);
     }, [task.id, changeTaskTitle, todolistId]);
 
+    const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
+        background: isDragging ? '#3f51b5' : 'white',
+        color: isDragging ? 'white' : 'black',
+        borderRadius: `5px`,
+        ...draggableStyle
+    });
 
-    return <div key={task.id}>
-        <Checkbox
-            checked={task.isDone}
-            color="secondary"
-            onChange={onChangeHandler}
-        />
 
-        <EditableSpan value={task.title} onChange={onTitleChangeHandler}/>
-        <IconButton onClick={onClickHandler}>
-            <DeleteForeverIcon/>
-        </IconButton>
-    </div>;
+    return (
+        <Draggable draggableId={task.id} index={index}>
+            {(provided, snapshot) => (
+                <div
+                    {...provided.draggableProps}
+                    ref={provided.innerRef}
+
+                    style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                >
+                    <IconButton {...provided.dragHandleProps}>
+                        <DehazeIcon/>
+                    </IconButton>
+                    <Checkbox
+                        checked={task.isDone}
+                        color="secondary"
+                        onChange={onChangeHandler}
+                    />
+
+                    <EditableSpan value={task.title} onChange={onTitleChangeHandler}/>
+                    <IconButton onClick={onClickHandler}>
+                        <DeleteForeverIcon/>
+                    </IconButton>
+                </div>
+            )}
+        </Draggable>
+    );
 });

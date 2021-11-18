@@ -5,7 +5,9 @@ import {EditableSpan} from './EditableSpan';
 import {Button, IconButton} from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import {Task} from './Task';
-import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful-dnd';
+import {DragDropContext, Droppable, DropResult} from 'react-beautiful-dnd';
+import {updateTask} from './store/tasksReducer';
+import {useDispatch} from 'react-redux';
 
 export const Todolist: React.FC<PropsType> = React.memo((
     {
@@ -13,6 +15,7 @@ export const Todolist: React.FC<PropsType> = React.memo((
         deleteTask, deleteTodolist, changeTodoListTitle, filter
     }
 ) => {
+    const dispatch = useDispatch();
     const addTaskNew = useCallback((title: string) => {
         addTask(title, id);
     }, [addTask, id]);
@@ -37,19 +40,17 @@ export const Todolist: React.FC<PropsType> = React.memo((
         tasksForTodolist = tasks.filter(t => t.isDone);
     }
 
-    const [task, setTask] = useState(tasksForTodolist);
-
     const onDragEnd = (result: DropResult) => {
         const {source, destination} = result;
         if (!destination) return;
 
-        const items = Array.from(task);
-        const [newOrder] = items.splice(source.index, 1);
-        items.splice(destination.index, 0, newOrder);
+        const newTaskIds = Array.from(tasksForTodolist);
+        const [newOrder] = newTaskIds.splice(source.index, 1);
+        newTaskIds.splice(destination.index, 0, newOrder);
 
-        setTask(items);
+
+        dispatch(updateTask(newTaskIds, id));
     };
-
     return <div>
         <h3><EditableSpan value={title} onChange={changeTodolistTitle}/>
             <IconButton onClick={removeTodolist}>
@@ -58,40 +59,31 @@ export const Todolist: React.FC<PropsType> = React.memo((
         </h3>
         <AddItemForm addItem={addTaskNew}/>
         <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="task">
-                {(provided => (
-                    <div className="task" {...provided.droppableProps} ref={provided.innerRef}>
+            <Droppable key={id} droppableId={id}>
+                {((provided,snapshot) => (
+                    <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                    >
                         {
-                            task.map((t, index) => {
-                                    return (
-                                        <Draggable draggableId={t.id} index={index}>
-                                            {(provided) => (
-                                                <div
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    // style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                                                >
-                                                    <Task
-                                                        task={t}
-                                                        changeTaskStatus={changeTaskStatus}
-                                                        changeTaskTitle={changeTaskTitle}
-                                                        removeTask={deleteTask}
-                                                        todolistId={id}
-                                                        key={t.id}
-                                                    />
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    );
-                                }
-                            )
+                            tasksForTodolist.map((t, index) => {
+                                return (
+                                    <Task
+                                        task={t}
+                                        changeTaskStatus={changeTaskStatus}
+                                        changeTaskTitle={changeTaskTitle}
+                                        removeTask={deleteTask}
+                                        todolistId={id}
+                                        key={t.id}
+                                        index={index}
+                                    />
+
+                                );
+                            })
                         }
                         {provided.placeholder}
                     </div>
-                ))
-
-                }
+                ))}
             </Droppable>
         </DragDropContext>
         <div style={{paddingTop: '10px'}}>

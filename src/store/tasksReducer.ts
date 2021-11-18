@@ -54,6 +54,11 @@ export const tasksReducer = (state: InitialState = initialState, action: Actions
             delete copyState[action.todolistId];
             return copyState;
         }
+        case 'UPDATE-TASK': {
+            const stateCopy = {...state};
+            stateCopy[action.todolistId] = action.task;
+            return stateCopy;
+        }
         default:
             return state;
     }
@@ -71,18 +76,23 @@ export const changeTaskStatus = (taskId: string, isDone: boolean, todolistId: st
 export const changeTaskTitle = (taskId: string, title: string, todolistId: string) => ({
     type: 'CHANGE-TASK-TITLE', title, todolistId, taskId
 } as const);
+export const updateTask = (task: TaskType[], todolistId: string) => ({
+    type: 'UPDATE-TASK', task, todolistId
+} as const);
 //type
 export type InitialState = typeof initialState
 export type DeleteTaskActionType = ReturnType<typeof deleteTask>
 export type AddTaskActionType = ReturnType<typeof addTask>
 export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatus>
 export type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitle>
+export type UpdateTaskActionType = ReturnType<typeof updateTask>
 
 type ActionsType = DeleteTaskActionType | AddTaskActionType
     | ChangeTaskStatusActionType
     | ChangeTaskTitleActionType
     | AddTodoListActionType
     | DeleteTodoListActionType
+    | UpdateTaskActionType
 
 
 
