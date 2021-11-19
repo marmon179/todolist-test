@@ -2,18 +2,17 @@ import React, { useCallback } from 'react';
 
 import { Button, IconButton } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { useDispatch } from 'react-redux';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 import { AddItemForm } from '../AddItemForm';
 
 import { FilterType } from 'App';
 import { Task, EditableSpan } from 'components';
-import { updateTask } from 'store/tasksReducer';
 
 export const Todolist: React.FC<TodoListPropsType> = React.memo(
   ({
     id,
+    index,
     title,
     tasks,
     changeFilter,
@@ -25,7 +24,6 @@ export const Todolist: React.FC<TodoListPropsType> = React.memo(
     changeTodoListTitle,
     filter,
   }) => {
-    const dispatch = useDispatch();
     const addTaskNew = useCallback(
       (newTitle: string) => {
         addTask(newTitle, id);
@@ -63,69 +61,67 @@ export const Todolist: React.FC<TodoListPropsType> = React.memo(
       tasksForTodolist = tasks.filter(t => t.isDone);
     }
 
-    const onDragEnd = (result: DropResult): void => {
-      const { source, destination } = result;
-      if (!destination) return;
-
-      const newTaskIds = Array.from(tasksForTodolist);
-      const [newOrder] = newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, newOrder);
-
-      dispatch(updateTask(newTaskIds, id));
-    };
     return (
-      <div>
-        <h3>
-          <EditableSpan value={title} onChange={changeTodolistTitle} />
-          <IconButton onClick={removeTodolist}>
-            <DeleteForeverIcon />
-          </IconButton>
-        </h3>
-        <AddItemForm addItem={addTaskNew} />
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable key={id} droppableId={id}>
-            {provided => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {tasksForTodolist.map((t, index) => (
-                  <Task
-                    task={t}
-                    changeTaskStatus={changeTaskStatus}
-                    changeTaskTitle={changeTaskTitle}
-                    removeTask={deleteTask}
-                    todolistId={id}
-                    key={t.id}
-                    index={index}
-                  />
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-        <div style={{ paddingTop: '10px' }}>
-          <Button
-            variant={filter === 'all' ? 'contained' : 'text'}
-            onClick={onAllClickHandler}
-            color="primary"
+      <Draggable draggableId={id} index={index}>
+        {provided => (
+          <div
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
           >
-            All
-          </Button>
-          <Button
-            variant={filter === 'active' ? 'contained' : 'text'}
-            onClick={onActiveClickHandler}
-            color="default"
-          >
-            Active
-          </Button>
-          <Button
-            variant={filter === 'completed' ? 'contained' : 'text'}
-            onClick={onCompletedClickHandler}
-            color="secondary"
-          >
-            Completed
-          </Button>
-        </div>
-      </div>
+            <h3>
+              <EditableSpan value={title} onChange={changeTodolistTitle} />
+              <IconButton onClick={removeTodolist}>
+                <DeleteForeverIcon />
+              </IconButton>
+            </h3>
+            <AddItemForm addItem={addTaskNew} />
+
+            <Droppable key={id} droppableId="Task">
+              {provided => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {tasksForTodolist.map((t, index) => (
+                    <Task
+                      task={t}
+                      changeTaskStatus={changeTaskStatus}
+                      changeTaskTitle={changeTaskTitle}
+                      removeTask={deleteTask}
+                      todolistId={id}
+                      key={t.id}
+                      index={index}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+
+            <div style={{ paddingTop: '10px' }}>
+              <Button
+                variant={filter === 'all' ? 'contained' : 'text'}
+                onClick={onAllClickHandler}
+                color="primary"
+              >
+                All
+              </Button>
+              <Button
+                variant={filter === 'active' ? 'contained' : 'text'}
+                onClick={onActiveClickHandler}
+                color="default"
+              >
+                Active
+              </Button>
+              <Button
+                variant={filter === 'completed' ? 'contained' : 'text'}
+                onClick={onCompletedClickHandler}
+                color="secondary"
+              >
+                Completed
+              </Button>
+            </div>
+          </div>
+        )}
+      </Draggable>
     );
   },
 );
@@ -140,6 +136,7 @@ export type TaskType = {
 
 export type TodoListPropsType = {
   id: string;
+  index: number;
   title: string;
   tasks: TaskType[];
   changeFilter: (value: FilterType, todoListId: string) => void;
