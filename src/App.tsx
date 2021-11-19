@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback } from 'react';
 
 import { Container, Grid, Paper } from '@material-ui/core';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { TaskType } from './components/Todolist/Todolist';
@@ -9,11 +9,11 @@ import { TaskType } from './components/Todolist/Todolist';
 import { AddItemForm, Todolist } from 'components';
 import { AppRootStateType } from 'store/store';
 import {
-  updateTask,
   addTask,
   changeTaskStatus,
   changeTaskTitle,
   deleteTask,
+  updateTask,
 } from 'store/tasksReducer';
 import {
   addTodolist,
@@ -90,56 +90,41 @@ const App = function (): ReactElement {
       <Grid container style={{ padding: '20px' }}>
         <AddItemForm addItem={addTodoList} />
       </Grid>
+
       <Grid container spacing={3}>
-        {todoLists.map((tl, index) => {
+        {todoLists.map(tl => {
           const tasksForTodolist = tasks[tl.id];
+
           const onDragEnd = (result: DropResult): void => {
             const { source, destination } = result;
             if (!destination) return;
 
-            if (
-              destination.droppableId === source.droppableId &&
-              destination.index === source.index
-            ) {
-              return;
-            }
             const newTaskIds = Array.from(tasksForTodolist);
             const [newOrder] = newTaskIds.splice(source.index, 1);
             newTaskIds.splice(destination.index, 0, newOrder);
 
             dispatch(updateTask(newTaskIds, tl.id));
           };
-
           return (
             <DragDropContext key={tl.id} onDragEnd={onDragEnd}>
-              <Droppable droppableId="Todo">
-                {provided => (
-                  <Grid
-                    item
+              <Grid item key={tl.id}>
+                <Paper elevation={3} style={{ padding: '10px' }}>
+                  <Todolist
                     key={tl.id}
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    <Paper elevation={3} style={{ padding: '10px' }}>
-                      <Todolist
-                        key={tl.id}
-                        id={tl.id}
-                        index={index}
-                        title={tl.title}
-                        tasks={tasksForTodolist}
-                        deleteTask={removeTask}
-                        changeFilter={changeFilter}
-                        addTask={addNewTask}
-                        changeTaskStatus={changeStatus}
-                        filter={tl.filter}
-                        deleteTodolist={removeTodolist}
-                        changeTaskTitle={changeTitle}
-                        changeTodoListTitle={changeTodoListTitle}
-                      />
-                    </Paper>
-                  </Grid>
-                )}
-              </Droppable>
+                    id={tl.id}
+                    title={tl.title}
+                    tasks={tasksForTodolist}
+                    deleteTask={removeTask}
+                    changeFilter={changeFilter}
+                    addTask={addNewTask}
+                    changeTaskStatus={changeStatus}
+                    filter={tl.filter}
+                    deleteTodolist={removeTodolist}
+                    changeTaskTitle={changeTitle}
+                    changeTodoListTitle={changeTodoListTitle}
+                  />
+                </Paper>
+              </Grid>
             </DragDropContext>
           );
         })}
