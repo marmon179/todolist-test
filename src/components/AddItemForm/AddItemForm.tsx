@@ -1,11 +1,15 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, FC, KeyboardEvent, memo, useState } from 'react';
 
 import { IconButton, TextField } from '@material-ui/core';
 import AddBoxTwoToneIcon from '@material-ui/icons/AddBoxTwoTone';
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({ addItem }) => {
+import { Nullable } from '../../types/Nullable';
+
+import { AddItemFormPropsType } from './types';
+
+export const AddItemForm: FC<AddItemFormPropsType> = memo(({ addItem }) => {
   const [title, setTitle] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Nullable<string>>(null);
 
   const addAnItem = (): void => {
     if (title.trim() !== '') {
@@ -46,7 +50,3 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({ addItem
     </div>
   );
 });
-// type
-type AddItemFormPropsType = {
-  addItem: (title: string) => void;
-};

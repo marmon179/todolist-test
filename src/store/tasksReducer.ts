@@ -1,7 +1,8 @@
 import { v1 } from 'uuid';
 
-import { TasksStateType } from 'App';
-import { TaskType } from 'components/Todolist/Todolist';
+import { TaskType } from '../components/Todolist/types';
+import { TasksStateType } from '../types/types';
+
 import { AddTodoListActionType, DeleteTodoListActionType } from 'store/todoListsReducer';
 
 const initialState: TasksStateType = {

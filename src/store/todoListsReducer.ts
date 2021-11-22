@@ -1,6 +1,6 @@
 import { v1 } from 'uuid';
 
-import { FilterType, TodoListType } from '../App';
+import { FilterType, TodoListType } from '../types/types';
 
 export const todoListsReducer = (
   // eslint-disable-next-line default-param-last

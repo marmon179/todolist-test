@@ -1,14 +1,15 @@
-import React, { ChangeEvent, CSSProperties, useCallback } from 'react';
+import React, { ChangeEvent, CSSProperties, FC, memo, useCallback } from 'react';
 
 import { Checkbox, IconButton } from '@material-ui/core';
 import DehazeIcon from '@material-ui/icons/Dehaze';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { Draggable } from 'react-beautiful-dnd';
 
-import { EditableSpan } from 'components';
-import { TaskType } from 'components/Todolist/Todolist';
+import { TaskPropsType } from './types';
 
-export const Task: React.FC<TaskPropsType> = React.memo(
+import { EditableSpan } from 'components';
+
+export const Task: FC<TaskPropsType> = memo(
   ({ changeTaskStatus, changeTaskTitle, removeTask, task, todolistId, index }) => {
     const onClickHandler = (): void => removeTask(task.id, todolistId);
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -59,12 +60,3 @@ export const Task: React.FC<TaskPropsType> = React.memo(
     );
   },
 );
-// type
-type TaskPropsType = {
-  changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void;
-  changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void;
-  removeTask: (taskId: string, todolistId: string) => void;
-  task: TaskType;
-  todolistId: string;
-  index: number;
-};

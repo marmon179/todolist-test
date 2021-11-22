@@ -4,7 +4,9 @@ import { Container, Grid, Paper } from '@material-ui/core';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { TaskType } from './components/Todolist/Todolist';
+import { getIsTasks } from './selectors/getIsTasks';
+import { getIsTodoList } from './selectors/getIsTodoList';
+import { FilterType, TasksStateType, TodoListType } from './types/types';
 
 import { AddItemForm, Todolist } from 'components';
 import { AppRootStateType } from 'store/store';
@@ -23,10 +25,8 @@ import {
 } from 'store/todoListsReducer';
 
 const App = function (): ReactElement {
-  const todoLists = useSelector<AppRootStateType, TodoListType[]>(
-    state => state.todoLists,
-  );
-  const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
+  const todoLists = useSelector<AppRootStateType, TodoListType[]>(getIsTodoList);
+  const tasks = useSelector<AppRootStateType, TasksStateType>(getIsTasks);
   const dispatch = useDispatch();
 
   const removeTask = useCallback(
@@ -92,8 +92,8 @@ const App = function (): ReactElement {
       </Grid>
 
       <Grid container spacing={3}>
-        {todoLists.map(tl => {
-          const tasksForTodolist = tasks[tl.id];
+        {todoLists.map(({ id, title, filter }) => {
+          const tasksForTodolist = tasks[id];
 
           const onDragEnd = (result: DropResult): void => {
             const { source, destination } = result;
@@ -103,22 +103,22 @@ const App = function (): ReactElement {
             const [newOrder] = newTaskIds.splice(source.index, 1);
             newTaskIds.splice(destination.index, 0, newOrder);
 
-            dispatch(updateTask(newTaskIds, tl.id));
+            dispatch(updateTask(newTaskIds, id));
           };
           return (
-            <DragDropContext key={tl.id} onDragEnd={onDragEnd}>
-              <Grid item key={tl.id}>
+            <DragDropContext key={id} onDragEnd={onDragEnd}>
+              <Grid item key={id}>
                 <Paper elevation={3} style={{ padding: '10px' }}>
                   <Todolist
-                    key={tl.id}
-                    id={tl.id}
-                    title={tl.title}
+                    key={id}
+                    id={id}
+                    title={title}
                     tasks={tasksForTodolist}
                     deleteTask={removeTask}
                     changeFilter={changeFilter}
                     addTask={addNewTask}
                     changeTaskStatus={changeStatus}
-                    filter={tl.filter}
+                    filter={filter}
                     deleteTodolist={removeTodolist}
                     changeTaskTitle={changeTitle}
                     changeTodoListTitle={changeTodoListTitle}
@@ -134,13 +134,3 @@ const App = function (): ReactElement {
 };
 
 export default App;
-// type
-export type FilterType = 'all' | 'active' | 'completed';
-export type TodoListType = {
-  id: string;
-  title: string;
-  filter: FilterType;
-};
-export type TasksStateType = {
-  [key: string]: TaskType[];
-};

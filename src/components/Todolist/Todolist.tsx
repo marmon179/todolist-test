@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { FC, memo, useCallback } from 'react';
 
 import { Button, IconButton } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
@@ -6,10 +6,11 @@ import { Droppable } from 'react-beautiful-dnd';
 
 import { AddItemForm } from '../AddItemForm';
 
-import { FilterType } from 'App';
+import { TodoListPropsType } from './types';
+
 import { EditableSpan, Task } from 'components';
 
-export const Todolist: React.FC<TodoListPropsType> = React.memo(
+export const Todolist: FC<TodoListPropsType> = memo(
   ({
     id,
     title,
@@ -72,14 +73,14 @@ export const Todolist: React.FC<TodoListPropsType> = React.memo(
         <Droppable key={id} droppableId={id}>
           {provided => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {tasksForTodolist.map((t, index) => (
+              {tasksForTodolist.map((task, index) => (
                 <Task
-                  task={t}
+                  task={task}
                   changeTaskStatus={changeTaskStatus}
                   changeTaskTitle={changeTaskTitle}
                   removeTask={deleteTask}
                   todolistId={id}
-                  key={t.id}
+                  key={task.id}
                   index={index}
                 />
               ))}
@@ -115,25 +116,3 @@ export const Todolist: React.FC<TodoListPropsType> = React.memo(
     );
   },
 );
-
-// type
-
-export type TaskType = {
-  id: string;
-  title: string;
-  isDone: boolean;
-};
-
-export type TodoListPropsType = {
-  id: string;
-  title: string;
-  tasks: TaskType[];
-  changeFilter: (value: FilterType, todoListId: string) => void;
-  addTask: (title: string, todoListId: string) => void;
-  changeTaskStatus: (id: string, isDone: boolean, todoListId: string) => void;
-  changeTaskTitle: (taskId: string, newTitle: string, todoListId: string) => void;
-  deleteTask: (taskId: string, todoListId: string) => void;
-  deleteTodolist: (id: string) => void;
-  changeTodoListTitle: (id: string, newTitle: string) => void;
-  filter: FilterType;
-};
