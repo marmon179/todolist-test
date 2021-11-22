@@ -6,23 +6,23 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getIsTasks } from './selectors/getIsTasks';
 import { getIsTodoList } from './selectors/getIsTodoList';
-import { FilterType, TasksStateType, TodoListType } from './types/types';
-
-import { AddItemForm, Todolist } from 'components';
-import { AppRootStateType } from 'store/store';
 import {
   addTask,
   changeTaskStatus,
   changeTaskTitle,
   deleteTask,
   updateTask,
-} from 'store/tasksReducer';
+} from './store/action-creators/actionCreatorsTasks/actionCreatorsTasks';
 import {
   addTodolist,
   changeTodolistFilter,
   changeTodolistTitle,
   deleteTodoList,
-} from 'store/todoListsReducer';
+} from './store/action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
+import { FilterType, TasksStateType, TodoListType } from './types/types';
+
+import { AddItemForm, Todolist } from 'components';
+import { AppRootStateType } from 'store/store';
 
 const App = function (): ReactElement {
   const todoLists = useSelector<AppRootStateType, TodoListType[]>(getIsTodoList);

@@ -8,21 +8,26 @@ export const EditableSpan: FC<EditableSpanPropsType> = memo(({ value, onChange }
   const [editMode, setEditMode] = useState(false);
   const [title, setTitle] = useState(value);
 
-  const activateEditMode = (): void => {
+  const onTitleDoubleClick = (): void => {
     setEditMode(true);
     setTitle(value);
   };
-  const activateViewMode = (): void => {
+  const onTextFieldBlur = (): void => {
     setEditMode(false);
     onChange(title);
   };
-  const changeTitle = (e: ChangeEvent<HTMLInputElement>): void => {
+  const onTitleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setTitle(e.currentTarget.value);
   };
 
   return editMode ? (
-    <TextField value={title} onChange={changeTitle} autoFocus onBlur={activateViewMode} />
+    <TextField
+      value={title}
+      onChange={onTitleChange}
+      autoFocus
+      onBlur={onTextFieldBlur}
+    />
   ) : (
-    <span onDoubleClick={activateEditMode}>{value}</span>
+    <span onDoubleClick={onTitleDoubleClick}>{value}</span>
   );
 });

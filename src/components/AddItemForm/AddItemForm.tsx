@@ -1,17 +1,14 @@
-import React, { ChangeEvent, FC, KeyboardEvent, memo, useState } from 'react';
+import React, { FC, KeyboardEvent, memo } from 'react';
 
 import { IconButton, TextField } from '@material-ui/core';
 import AddBoxTwoToneIcon from '@material-ui/icons/AddBoxTwoTone';
 
-import { Nullable } from '../../types/Nullable';
-
+import { useItemForm } from './hooks/useItemForm/useItemForm';
 import { AddItemFormPropsType } from './types';
 
 export const AddItemForm: FC<AddItemFormPropsType> = memo(({ addItem }) => {
-  const [title, setTitle] = useState('');
-  const [error, setError] = useState<Nullable<string>>(null);
-
-  const addAnItem = (): void => {
+  const { title, error, setTitle, setError, onTextFieldChange } = useItemForm();
+  const onIconButtonClick = (): void => {
     if (title.trim() !== '') {
       addItem(title);
       setTitle('');
@@ -20,16 +17,12 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(({ addItem }) => {
     }
   };
 
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
-    setTitle(e.currentTarget.value);
-  };
-
-  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>): void => {
+  const onTextFieldKeyPress = (e: KeyboardEvent<HTMLInputElement>): void => {
     if (error !== null) {
       setError(null);
     }
     if (e.charCode === 13) {
-      addAnItem();
+      onIconButtonClick();
     }
   };
 
@@ -39,12 +32,12 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(({ addItem }) => {
         variant="standard"
         error={!!error}
         value={title}
-        onChange={onChangeHandler}
-        onKeyPress={onKeyPressHandler}
+        onChange={onTextFieldChange}
+        onKeyPress={onTextFieldKeyPress}
         label="Title"
         helperText={error}
       />
-      <IconButton color="primary" onClick={addAnItem}>
+      <IconButton color="primary" onClick={onIconButtonClick}>
         <AddBoxTwoToneIcon />
       </IconButton>
     </div>

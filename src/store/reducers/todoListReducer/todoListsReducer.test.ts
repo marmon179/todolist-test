@@ -1,14 +1,14 @@
 import { v1 } from 'uuid';
 
-import { FilterType, TodoListType } from '../App';
-
+import { FilterType, TodoListType } from '../../../types/types';
 import {
   addTodolist,
   changeTodolistFilter,
   changeTodolistTitle,
   deleteTodoList,
-  todoListsReducer,
-} from './todoListsReducer';
+} from '../../action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
+
+import { todoListsReducer } from './todoListsReducer';
 
 let todolistId1: string;
 let todolistId2: string;
