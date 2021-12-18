@@ -1,10 +1,5 @@
 import { TodoListType } from '../../../types/types';
-import {
-  ADD_TODOLIST,
-  CHANGE_TODOLIST_FILTER,
-  CHANGE_TODOLIST_TITLE,
-  DELETE_TODOLIST,
-} from '../../action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
+import { TodolistActions } from '../../action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
 import { ActionsTodoListType } from '../../action-creators/actionCreatorsTodoList/types';
 
 export const todoListsReducer = (
@@ -13,11 +8,11 @@ export const todoListsReducer = (
   action: ActionsTodoListType,
 ): TodoListType[] => {
   switch (action.type) {
-    case DELETE_TODOLIST: {
+    case TodolistActions.DELETE_TODOLIST: {
       const { todolistId } = action;
       return state.filter(tl => tl.id !== todolistId);
     }
-    case ADD_TODOLIST: {
+    case TodolistActions.ADD_TODOLIST: {
       const { title, todolistId } = action;
       return [
         {
@@ -28,7 +23,7 @@ export const todoListsReducer = (
         ...state,
       ];
     }
-    case CHANGE_TODOLIST_TITLE: {
+    case TodolistActions.CHANGE_TODOLIST_TITLE: {
       const { id, title } = action;
       const todolist = state.find(tl => tl.id === id);
       if (todolist) {
@@ -36,7 +31,7 @@ export const todoListsReducer = (
       }
       return [...state];
     }
-    case CHANGE_TODOLIST_FILTER: {
+    case TodolistActions.CHANGE_TODOLIST_FILTER: {
       const { id, filter } = action;
       const todolist = state.find(tl => tl.id === id);
       if (todolist) {
