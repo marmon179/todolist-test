@@ -2,8 +2,9 @@ import React, { ReactElement, useCallback } from 'react';
 
 import { Container, Grid, Paper } from '@material-ui/core';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import { useTypedSelector } from './hooks/useTypedSelector';
 import { getIsTasks } from './selectors/getIsTasks';
 import { getIsTodoList } from './selectors/getIsTodoList';
 import {
@@ -19,14 +20,13 @@ import {
   changeTodolistTitle,
   deleteTodoList,
 } from './store/action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
-import { FilterType, TasksStateType, TodoListType } from './types/types';
+import { FilterType } from './types/types';
 
 import { AddItemForm, Todolist } from 'components';
-import { AppRootStateType } from 'store/store';
 
-const App = function (): ReactElement {
-  const todoLists = useSelector<AppRootStateType, TodoListType[]>(getIsTodoList);
-  const tasks = useSelector<AppRootStateType, TasksStateType>(getIsTasks);
+const App = (): ReactElement => {
+  const todoLists = useTypedSelector(getIsTodoList);
+  const tasks = useTypedSelector(getIsTasks);
   const dispatch = useDispatch();
 
   const removeTask = useCallback(

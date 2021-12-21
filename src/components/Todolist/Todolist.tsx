@@ -1,10 +1,11 @@
 import React, { FC, memo, useCallback } from 'react';
 
-import { Button, IconButton } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { Droppable } from 'react-beautiful-dnd';
 
 import { AddItemForm } from '../AddItemForm';
+import { ButtonFilter } from '../ButtonFilter/ButtonFilter';
 
 import { TodoListPropsType } from './types';
 
@@ -89,29 +90,12 @@ export const Todolist: FC<TodoListPropsType> = memo(
           )}
         </Droppable>
 
-        <div style={{ paddingTop: '10px' }}>
-          <Button
-            variant={filter === 'all' ? 'contained' : 'text'}
-            onClick={onAllClickHandler}
-            color="primary"
-          >
-            All
-          </Button>
-          <Button
-            variant={filter === 'active' ? 'contained' : 'text'}
-            onClick={onActiveClickHandler}
-            color="default"
-          >
-            Active
-          </Button>
-          <Button
-            variant={filter === 'completed' ? 'contained' : 'text'}
-            onClick={onCompletedClickHandler}
-            color="secondary"
-          >
-            Completed
-          </Button>
-        </div>
+        <ButtonFilter
+          filter={filter}
+          onAllClickHandler={onAllClickHandler}
+          onActiveClickHandler={onActiveClickHandler}
+          onCompletedClickHandler={onCompletedClickHandler}
+        />
       </div>
     );
   },
