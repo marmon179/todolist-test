@@ -10,7 +10,7 @@ import {
   changeTaskTitle,
   deleteTask,
   updateTask,
-} from './actionCreatorsTasks';
+} from './index';
 
 export type InitialTasksState = typeof initialTasksState;
 export type DeleteTaskActionType = ReturnType<typeof deleteTask>;

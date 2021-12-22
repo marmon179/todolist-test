@@ -13,13 +13,13 @@ import {
   changeTaskTitle,
   deleteTask,
   updateTask,
-} from './store/action-creators/actionCreatorsTasks/actionCreatorsTasks';
+} from './store/action-creators/actionCreatorsTasks';
 import {
   addTodolist,
   changeTodolistFilter,
   changeTodolistTitle,
   deleteTodoList,
-} from './store/action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
+} from './store/action-creators/actionCreatorsTodoList';
 import { FilterType } from './types/types';
 
 import { AddItemForm, Todolist } from 'components';

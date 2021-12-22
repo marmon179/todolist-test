@@ -6,7 +6,7 @@ import {
   changeTodolistFilter,
   changeTodolistTitle,
   deleteTodoList,
-} from '../../action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
+} from '../../action-creators/actionCreatorsTodoList';
 
 import { todoListsReducer } from './todoListsReducer';
 

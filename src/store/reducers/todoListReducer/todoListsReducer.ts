@@ -1,11 +1,13 @@
+import { Reducer } from 'redux';
+
 import { TodoListType } from '../../../types/types';
-import { TodolistActions } from '../../action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
+import { TodolistActions } from '../../action-creators/actionCreatorsTodoList';
 import { ActionsTodoListType } from '../../action-creators/actionCreatorsTodoList/types';
 
-export const todoListsReducer = (
+export const todoListsReducer: Reducer<TodoListType[], ActionsTodoListType> = (
   // eslint-disable-next-line default-param-last
-  state: TodoListType[] = [],
-  action: ActionsTodoListType,
+  state = [],
+  action,
 ): TodoListType[] => {
   switch (action.type) {
     case TodolistActions.DELETE_TODOLIST: {

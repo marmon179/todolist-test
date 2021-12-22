@@ -1,22 +1,23 @@
+import { Reducer } from 'redux';
 import { v1 } from 'uuid';
 
 import { TaskType } from '../../../components/Todolist/types';
 import { TasksStateType } from '../../../types/types';
-import { TaskActions } from '../../action-creators/actionCreatorsTasks/actionCreatorsTasks';
+import { TaskActions } from '../../action-creators/actionCreatorsTasks';
 import {
   ActionsTasksType,
   InitialTasksState,
 } from '../../action-creators/actionCreatorsTasks/types';
-import { TodolistActions } from '../../action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
+import { TodolistActions } from '../../action-creators/actionCreatorsTodoList';
 
 export const initialTasksState: TasksStateType = {
   count: [],
 };
 
-export const tasksReducer = (
+export const tasksReducer: Reducer<InitialTasksState, ActionsTasksType> = (
   // eslint-disable-next-line default-param-last
-  state: InitialTasksState = initialTasksState,
-  action: ActionsTasksType,
+  state = initialTasksState,
+  action,
 ): InitialTasksState => {
   switch (action.type) {
     case TaskActions.DELETE_TASK: {

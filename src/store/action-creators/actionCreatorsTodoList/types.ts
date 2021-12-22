@@ -3,7 +3,7 @@ import {
   changeTodolistFilter,
   changeTodolistTitle,
   deleteTodoList,
-} from './actionCreatorsTodoList';
+} from './index';
 
 export type DeleteTodoListActionType = ReturnType<typeof deleteTodoList>;
 export type AddTodoListActionType = ReturnType<typeof addTodolist>;

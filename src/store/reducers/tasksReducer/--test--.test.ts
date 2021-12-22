@@ -4,11 +4,11 @@ import {
   changeTaskStatus,
   changeTaskTitle,
   deleteTask,
-} from '../../action-creators/actionCreatorsTasks/actionCreatorsTasks';
+} from '../../action-creators/actionCreatorsTasks';
 import {
   addTodolist,
   deleteTodoList,
-} from '../../action-creators/actionCreatorsTodoList/actionCreatorsTodoList';
+} from '../../action-creators/actionCreatorsTodoList';
 
 import { tasksReducer } from './tasksReducer';
 
