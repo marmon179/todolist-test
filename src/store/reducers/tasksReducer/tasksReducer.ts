@@ -5,16 +5,20 @@ import { TaskType } from '../../../components/Todolist/types';
 import { TasksStateType } from '../../../types/types';
 import { TaskActions } from '../../action-creators/actionCreatorsTasks';
 import {
-  ActionsTasksType,
+  TasksActionsTypes,
   InitialTasksState,
 } from '../../action-creators/actionCreatorsTasks/types';
 import { TodolistActions } from '../../action-creators/actionCreatorsTodoList';
+import { TodolistActionsTypes } from '../../action-creators/actionCreatorsTodoList/types';
 
 export const initialTasksState: TasksStateType = {
   count: [],
 };
 
-export const tasksReducer: Reducer<InitialTasksState, ActionsTasksType> = (
+export const tasksReducer: Reducer<
+  InitialTasksState,
+  TasksActionsTypes | TodolistActionsTypes
+> = (
   // eslint-disable-next-line default-param-last
   state = initialTasksState,
   action,

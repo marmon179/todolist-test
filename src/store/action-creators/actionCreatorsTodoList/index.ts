@@ -8,26 +8,29 @@ export enum TodolistActions {
   CHANGE_TODOLIST_TITLE = '@@todolist-reducer/CHANGE-TODOLIST-TITLE',
   CHANGE_TODOLIST_FILTER = '@@todolist-reducer/CHANGE-TODOLIST-FILTER',
 }
-export const deleteTodoList = (todolistId: string) =>
-  ({
-    type: TodolistActions.DELETE_TODOLIST,
-    todolistId,
-  } as const);
-export const addTodolist = (title: string) =>
-  ({
-    type: TodolistActions.ADD_TODOLIST,
-    title,
-    todolistId: v1(),
-  } as const);
-export const changeTodolistTitle = (id: string, title: string) =>
-  ({
-    type: TodolistActions.CHANGE_TODOLIST_TITLE,
-    id,
-    title,
-  } as const);
-export const changeTodolistFilter = (id: string, filter: FilterType) =>
-  ({
-    type: TodolistActions.CHANGE_TODOLIST_FILTER,
-    id,
-    filter,
-  } as const);
+
+export const actionsTodolist = {
+  deleteTodoList: (todolistId: string) =>
+    ({
+      type: TodolistActions.DELETE_TODOLIST,
+      todolistId,
+    } as const),
+  addTodolist: (title: string) =>
+    ({
+      type: TodolistActions.ADD_TODOLIST,
+      title,
+      todolistId: v1(),
+    } as const),
+  changeTodolistTitle: (id: string, title: string) =>
+    ({
+      type: TodolistActions.CHANGE_TODOLIST_TITLE,
+      id,
+      title,
+    } as const),
+  changeTodolistFilter: (id: string, filter: FilterType) =>
+    ({
+      type: TodolistActions.CHANGE_TODOLIST_FILTER,
+      id,
+      filter,
+    } as const),
+};

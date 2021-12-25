@@ -2,9 +2,9 @@ import { Reducer } from 'redux';
 
 import { TodoListType } from '../../../types/types';
 import { TodolistActions } from '../../action-creators/actionCreatorsTodoList';
-import { ActionsTodoListType } from '../../action-creators/actionCreatorsTodoList/types';
+import { TodolistActionsTypes } from '../../action-creators/actionCreatorsTodoList/types';
 
-export const todoListsReducer: Reducer<TodoListType[], ActionsTodoListType> = (
+export const todoListsReducer: Reducer<TodoListType[], TodolistActionsTypes> = (
   // eslint-disable-next-line default-param-last
   state = [],
   action,

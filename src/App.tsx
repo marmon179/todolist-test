@@ -7,19 +7,8 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector } from './hooks/useTypedSelector';
 import { getIsTasks } from './selectors/getIsTasks';
 import { getIsTodoList } from './selectors/getIsTodoList';
-import {
-  addTask,
-  changeTaskStatus,
-  changeTaskTitle,
-  deleteTask,
-  updateTask,
-} from './store/action-creators/actionCreatorsTasks';
-import {
-  addTodolist,
-  changeTodolistFilter,
-  changeTodolistTitle,
-  deleteTodoList,
-} from './store/action-creators/actionCreatorsTodoList';
+import { actionsTasks } from './store/action-creators/actionCreatorsTasks';
+import { actionsTodolist } from './store/action-creators/actionCreatorsTodoList';
 import { FilterType } from './types/types';
 
 import { AddItemForm, Todolist } from 'components';
@@ -29,6 +18,10 @@ const App = (): ReactElement => {
   const tasks = useTypedSelector(getIsTasks);
   const dispatch = useDispatch();
 
+  const { changeTaskStatus, changeTaskTitle, deleteTask, updateTask, addTask } =
+    actionsTasks;
+  const { addTodolist, changeTodolistFilter, changeTodolistTitle, deleteTodoList } =
+    actionsTodolist;
   const removeTask = useCallback(
     (id: string, todoListId: string) => {
       dispatch(deleteTask(id, todoListId));
