@@ -1,19 +1,15 @@
 import { v1 } from 'uuid';
 
 import { FilterType, TodoListType } from '../../../types/types';
-import {
-  addTodolist,
-  changeTodolistFilter,
-  changeTodolistTitle,
-  deleteTodoList,
-} from '../../action-creators/actionCreatorsTodoList';
+import { actionsTodolist } from '../../action-creators/actionCreatorsTodoList';
 
 import { todoListsReducer } from './todoListsReducer';
 
 let todolistId1: string;
 let todolistId2: string;
 let startState: TodoListType[] = [];
-
+const { addTodolist, changeTodolistFilter, changeTodolistTitle, deleteTodoList } =
+  actionsTodolist;
 beforeEach(() => {
   todolistId1 = v1();
   todolistId2 = v1();

@@ -1,17 +1,11 @@
 import { TasksStateType } from '../../../types/types';
-import {
-  addTask,
-  changeTaskStatus,
-  changeTaskTitle,
-  deleteTask,
-} from '../../action-creators/actionCreatorsTasks';
-import {
-  addTodolist,
-  deleteTodoList,
-} from '../../action-creators/actionCreatorsTodoList';
+import { actionsTasks } from '../../action-creators/actionCreatorsTasks';
+import { actionsTodolist } from '../../action-creators/actionCreatorsTodoList';
 
 import { tasksReducer } from './tasksReducer';
 
+const { changeTaskStatus, changeTaskTitle, deleteTask, addTask } = actionsTasks;
+const { addTodolist, deleteTodoList } = actionsTodolist;
 let startState: TasksStateType = {};
 beforeEach(() => {
   startState = {
